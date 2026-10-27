@@ -1225,6 +1225,14 @@ run() {
     _podman_cmd="podman"
     [ ${DEBUG} -eq 1 ] && _podman_cmd="podman --log-level=debug"
 
+    #tblume make sure that sources are available
+    echo "VPN on buildhost started (y/n)? "
+    read -r REPLY
+    if [ "$REPLY" != "y" ]; then
+        echo "Please start VPN on buildhost"
+	exit 1
+    fi
+
     [ "$(uname -s)" = "Darwin" ] && _macos_adjust_microvm
     if [ "$USE_MICROVM" -eq 1 ]; then
         if ! _check_microvm; then
@@ -1327,6 +1335,11 @@ run() {
     fi
     _agent_mounts="$(_bind_agent_mounts)" || return "$FAILURE"
     _ro_mounts="$(_bind_ro_mounts)" || return "$FAILURE"
+
+    # tblume prepare wprkspace
+    if ! [ -d /home/tsai/ai-agents-sandbox/workspace/buildhost/tsai-workdir ]; then
+        mount /home/tsai/ai-agents-sandbox/workspace/buildhost
+    fi
 
     # Resume a stopped container
     if [ -n "$_ctn_state" ]; then
