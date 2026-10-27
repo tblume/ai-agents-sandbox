@@ -270,22 +270,22 @@ build_install() {
 
         sed \
             -e "s|^DATA_D=.*|DATA_D=${PKGDATADIR}|" \
-            "${BUILD_D}${BINDIR}/${PRJ_ID}" \
-            > "${BUILD_D}${BINDIR}/${PRJ_ID}.install" || {
-                echo "Failed to update ${BINDIR}/${PRJ_ID}.install"
+            "${BUILD_D}/usr/local/bin/${PRJ_ID}" \
+            > "${BUILD_D}/usr/local/bin/${PRJ_ID}.install" || {
+                echo "Failed to update ${BUILD_D}/usr/local/bin/${PRJ_ID}.install"
                 _rc="${FAILURE}"; break
             }
 
         echo "Installing ${DESTDIR}${BINDIR}/${PRJ_ID} ..."
-        install "${BUILD_D}${BINDIR}/${PRJ_ID}.install" \
+        install "${BUILD_D}/usr/local/bin/${PRJ_ID}.install" \
             "${DESTDIR}${BINDIR}/${PRJ_ID}" || {
                 echo "Failed to install binary"
                 _rc="${FAILURE}"; break
             }
-        rm "${BUILD_D}${BINDIR}/${PRJ_ID}.install"
+        rm "${BUILD_D}/usr/local/bin/${PRJ_ID}.install"
         echo "Installing ${DESTDIR}${PKGDATADIR} ..."
         (
-            cd "${BUILD_D}${PKGDATADIR}" || {
+            cd "${BUILD_D}/usr/local/share/glaipnir" || {
                 echo "Built data dir not found"
                 exit 1
             }
